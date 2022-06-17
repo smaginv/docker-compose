@@ -1,8 +1,9 @@
-version: '3'
+version: "3.8"
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper
+    restart: always
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -10,18 +11,19 @@ services:
       - 2181:2181
     volumes:
     - type: volume
-      source: zookeeper-data
+      source: zookeeper_data
       target: /var/lib/zookeeper/data
     - type: volume
-      source: zookeeper-log
+      source: zookeeper_log
       target: /var/lib/zookeeper/log
     - type: volume
-      source: zookeeper-secrets
+      source: zookeeper_secrets
       target: /etc/zookeeper/secrets
   
   kafka:
     image: confluentinc/cp-kafka:latest
     container_name: kafka
+    restart: always
     depends_on: 
       - zookeeper
     ports:
@@ -33,6 +35,7 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
     volumes:
     - type: volume
       source: data
@@ -44,6 +47,6 @@ services:
 volumes:
   data:
   secrets:
-  zookeeper-data:
-  zookeeper-log:
-  zookeeper-secrets:
+  zookeeper_data:
+  zookeeper_log:
+  zookeeper_secrets:

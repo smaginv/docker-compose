@@ -4,13 +4,15 @@ services:
     image: postgres
     container_name: postgres
     restart: always
-    ports:
-      - "5432:5432"
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
+    ports:
+      - 5432:5432
     volumes:
-      - local_pgdata:/var/lib/postgresql/data
+    - type: volume
+      source: data
+      target: /var/lib/postgresql/data
 
 volumes:
-  local_pgdata:
+  data:
