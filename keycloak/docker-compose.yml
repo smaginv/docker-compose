@@ -1,0 +1,52 @@
+version: "3.8"
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    restart: always
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: password
+      KC_DB: postgres
+      KC_DB_URL_HOST: postgres
+      KC_DB_URL_PORT: 5432
+      KC_DB_SCHEMA: public
+      KC_DB_URL_DATABASE: keycloak
+      KC_DB_USERNAME: user
+      KC_DB_PASSWORD: password
+      KC_HOSTNAME_STRICT: false
+      KC_HTTP_ENABLED: true
+      KC_HEALTH_ENABLED: true
+      QUARKUS_TRANSACTION_MANAGER_ENABLE_RECOVERY: true
+    ports:
+      - 8383:8080
+    networks:
+      - pg-keycloak-net
+    depends_on:
+      - postgres
+    command:
+      - start
+
+  postgres:
+    image: postgres:latest
+    container_name: pg-keycloak
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: keycloak
+    ports:
+      - 5433:5432
+    networks:
+      - pg-keycloak-net
+    volumes:
+      - pg-keycloak-data:/var/lib/postgresql/data
+
+networks:
+  pg-keycloak-net:
+    name: pg-keycloak-net
+    driver: bridge
+
+volumes:
+  pg-keycloak-data:
+    name: pg-keycloak-data
