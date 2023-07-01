@@ -15,7 +15,6 @@ services:
 networks:
   redis-net:
     name: redis-net
-    driver: bridge
 
 volumes:
   redis-data:

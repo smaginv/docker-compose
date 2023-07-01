@@ -10,24 +10,14 @@ services:
     ports:
       - 2181:2181
     volumes:
-    - type: volume
-      source: zookeeper_data
-      target: /var/lib/zookeeper/data
-    - type: volume
-      source: zookeeper_log
-      target: /var/lib/zookeeper/log
-    - type: volume
-      source: zookeeper_secrets
-      target: /etc/zookeeper/secrets
+      - zookeeper-data:/var/lib/zookeeper/data
+      - zookeeper-log:/var/lib/zookeeper/log
+      - zookeeper-secrets:/etc/zookeeper/secrets
   
   kafka:
     image: confluentinc/cp-kafka:latest
     container_name: kafka
     restart: always
-    depends_on: 
-      - zookeeper
-    ports:
-      - 9092:9092
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -36,17 +26,28 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_DELETE_TOPIC_ENABLE: 'true'
+    depends_on: 
+      - zookeeper
+    ports:
+      - 9092:9092
+    networks:
+      - kafka-net
     volumes:
-    - type: volume
-      source: data
-      target: /var/lib/kafka/data
-    - type: volume
-      source: secrets
-      target: /etc/kafka/secrets
-      
+      - kafka-data:/var/lib/kafka/data
+      - kafka-secrets:/etc/kafka/secrets
+
+networks:
+  kafka-net:
+    name: kafka-net
+
 volumes:
-  data:
-  secrets:
-  zookeeper_data:
-  zookeeper_log:
-  zookeeper_secrets:
+  zookeeper-data:
+    name: zookeeper-data
+  zookeeper-log:
+    name: zookeeper-log
+  zookeeper-secrets:
+    name: zookeeper-secrets
+  kafka-data:
+    name: kafka-data
+  kafka-secrets:
+    name: kafka-secrets

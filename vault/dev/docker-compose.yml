@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   vault:
-    image: hashicorp/vault
+    image: hashicorp/vault:latest
     container_name: vault-dev
     restart: always
     environment:
@@ -18,4 +18,3 @@ services:
 networks:
   vault-dev-net:
     name: vault-dev-net
-    driver: bridge

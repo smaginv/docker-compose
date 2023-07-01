@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   db:
-    image: mysql
+    image: mysql:latest
     container_name: mysql
     restart: always
     environment:
@@ -10,10 +10,15 @@ services:
       MYSQL_ROOT_PASSWORD: root
     ports:
       - 3306:3306
+    networks:
+      - mysql-net
     volumes:
-    - type: volume
-      source: data
-      target: /var/lib/mysql
+      - mysql-data:/var/lib/mysql
+
+networks:
+  mysql-net:
+    name: mysql-net
 
 volumes:
-  data:
+  mysql-data:
+    name: mysql-data

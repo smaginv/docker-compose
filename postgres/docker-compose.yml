@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   db:
-    image: postgres
+    image: postgres:latest
     container_name: postgres
     restart: always
     environment:
@@ -17,7 +17,6 @@ services:
 networks:
   pg-net:
     name: pg-net
-    driver: bridge
 
 volumes:
   pg-data:
