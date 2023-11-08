@@ -1,0 +1,41 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - 5432:5432
+    networks:
+      - pg-net
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+  db2:
+    image: postgres:latest
+    container_name: postgres2
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - 5433:5432
+    networks:
+      - pg-net2
+    volumes:
+      - pg-data2:/var/lib/postgresql/data
+
+networks:
+  pg-net:
+    name: pg-net
+  pg-net2:
+    name: pg-net2
+
+volumes:
+  pg-data:
+    name: pg-data
+  pg-data2:
+    name: pg-data2
