@@ -3,7 +3,7 @@ services:
   artemis:
     image: apache/activemq-artemis:latest
     container_name: artemis
-    restart: always
+    restart: unless-stopped
     environment:
       ARTEMIS_USER: user
       ARTEMIS_PASSWORD: password
