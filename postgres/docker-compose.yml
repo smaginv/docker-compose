@@ -20,3 +20,4 @@ networks:
 volumes:
   pg-data:
     name: pg-data
+    external: true
